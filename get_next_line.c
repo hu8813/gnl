@@ -3,70 +3,151 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hu8813 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 19:35:47 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/23 23:31:50 by hu8813           ###   ########.fr       */
+/*   Created: 2022/10/21 12:24:49 by huaydin           #+#    #+#             */
+/*   Updated: 2022/10/24 13:42:49 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*return_next_line(char **s)
+size_t	ft_strlen(const char *s)
 {
-	char	*out;
-	char	*tmp;
-	size_t	len;
+	size_t	length;
 
-	len = 0;
-	out = NULL;
-	while ((*s)[len] != '\n' && (*s)[len])
-		len++;
-	if ((*s)[len] == '\n')
+	length = 0;
+	while (s[length])
+		length++;
+	return (length);
+}
+
+static char	*ft_get_first_line(char **all_lines)
+{
+	char	*first_line;
+	char	*tmp;
+	size_t	i;
+
+	i = 0;
+	first_line = NULL;
+	while ((*all_lines)[i] != '\n' && (*all_lines)[i])
+		i++;
+	if ((*all_lines)[i] == '\n')
 	{
-		out = ft_substr(*s, 0, len + 1);
-		tmp = ft_strdup(*s + len + 1);
-		free(*s);
-		*s = tmp;
-		if (!**s)
+		first_line = ft_substr(*all_lines, 0, i + 1);
+		tmp = ft_strdup(*all_lines + i + 1);
+		free(*all_lines);
+		*all_lines = tmp;
+		if (!**all_lines)
 		{
-			free(*s);
-			*s = NULL;
+			free(*all_lines);
+			*all_lines = NULL;
 		}
-		return (out);
+		return (first_line);
 	}
-	out = ft_strdup(*s);
-	free(*s);
-	*s = NULL;
-	return (out);
+	first_line = ft_strdup(*all_lines);
+	free(*all_lines);
+	*all_lines = NULL;
+	return (first_line);
+}
+
+static char	*ft_join(char *all_lines, char *buffer, ssize_t n)
+{
+	char	*tmp;
+
+	buffer[n] = '\0';
+	tmp = ft_strjoin(all_lines, buffer);
+	free(all_lines);
+	all_lines = tmp;
+	return (all_lines);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
-	char		*tmp;
-	static char	*s;
+	char		*buffer;
+	static char	*all_lines;
 	ssize_t		n;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buf = malloc(BUFFER_SIZE + 1);
-	s = ft_strdup("");
-	if (!buf || !s)
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
-	n = read(fd, buf, BUFFER_SIZE);
+	if (!all_lines)
+		all_lines = ft_strdup("");
+	n = read(fd, buffer, BUFFER_SIZE);
 	while (n > 0)
 	{
-		buf[n] = '\0';
-		tmp = ft_strjoin(s, buf);
-		free(s);
-		s = tmp;
-		if (ft_strchr(buf, '\n'))
+		buffer[n] = '\0';
+		all_lines = ft_join(all_lines, buffer, n);
+		if (ft_strchr(buffer, '\n'))
 			break ;
-		n = read(fd, buf, BUFFER_SIZE);
+		n = read(fd, buffer, BUFFER_SIZE);
 	}
-	free(buf);
-	if ((n < 0) || (!n && (!s || !*s)))
+	free(buffer);
+	buffer = NULL;
+	if ((n < 0) || (!n && (!all_lines || !*all_lines)))
 		return (NULL);
-	return (return_next_line(&s));
+	return (ft_get_first_line(&all_lines));
 }
+
+
+
+/*
+int main()
+{
+  int fd;
+  
+  fd = open("text.txt", O_RDONLY);
+  printf("Line1:%s\n", get_next_line(fd));
+  printf("Line2:%s\n", get_next_line(fd));
+  printf("Line3:%s\n", get_next_line(fd));
+  //printf("%s\n", get_next_line(fd));
+  //close(fd);
+}
+*/
+
+/*
+int	main(int argc, char **argv)
+{
+	char *line;
+	int f;
+	size_t read;
+	size_t len;
+	FILE *fd;	
+	
+	printf("fd=%d\n", BUFFER_SIZE);
+	(void)argc;
+	(void)argv;
+
+	f = open("text.txt", O_RDONLY);
+	//f = (int) fd;
+	printf("fd=%d\n", f);
+	//read = getline(&line, &len, fd);
+	printf("fd=%zu\n", read);
+
+	//printf("fd=%d\n", fd);
+		
+	while ((read = getline(&line, &len, fd)) != -1) {
+		printf("Retrieved line of length %zu :\n", read);
+		printf("%s", line);
+	}
+	
+
+	if (argc == 1)
+		fd = 0;
+	else if (argc == 2)
+	//	fd = open(argv[1], O_RDONLY);
+		fd = open("text.txt", O_RDONLY);
+	else
+		return (2);
+	while (get_next_line(fd, &line) == 1)
+	{
+		ft_putendl(line);
+		free(line);
+	}
+	if (argc == 2)
+		close(fd);
+
+}
+*/
