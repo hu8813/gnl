@@ -6,7 +6,7 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:36:15 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/24 13:59:57 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/10/24 17:15:15 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,18 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	if (!s)
 		return (0);
-	strsize = ft_strlen(s);
-	if (start >= strsize)
-		start = strsize;
-	if (len > strsize - start)
-		len = strsize - start;
+	if (start > ft_strlen(s))
+		start = ft_strlen(s);
+	strsize = ft_strlen(s + start);
+	if (len > strsize)
+		len = strsize;
 	result = (char *)malloc(sizeof(char) * len + 1);
 	if (!result)
 		return (NULL);
 	str = result;
-	str = str + start;
-	while (*str && len--)
-		*result++ = *str++;
+	s = s + start;
+	while (*s && len--)
+		*result++ = *s++;
 	*result = '\0';
-	return (result);
+	return (str);
 }

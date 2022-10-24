@@ -6,7 +6,7 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:24:55 by huaydin           #+#    #+#             */
-/*   Updated: 2022/10/24 12:15:07 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/10/24 17:15:10 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,37 +74,23 @@ char	*ft_strjoin(char const *s1, char const *s2)
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char		*str;
+	char		*result;
 	size_t		strsize;
 
 	if (!s)
 		return (0);
-	strsize = ft_strlen(s);
-	if (start >= strsize)
-		start = strsize;
-	if (len > strsize - start)
-		len = strsize - start;
-	str = (char *)malloc(sizeof(char) * len + 1);
-	if (!str)
+	if (start > ft_strlen(s))
+		start = ft_strlen(s);
+	strsize = ft_strlen(s + start);
+	if (len > strsize)
+		len = strsize;
+	result = (char *)malloc(sizeof(char) * len + 1);
+	if (!result)
 		return (NULL);
-	ft_strlcpy(str, &s[start], len + 1);
+	str = result;
+	s = s + start;
+	while (*s && len--)
+		*result++ = *s++;
+	*result = '\0';
 	return (str);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(src);
-	if (size == 0)
-		return (len);
-	while (src[i] && i < size -1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (i < size)
-		dst[i] = '\0';
-	return (len);
 }
