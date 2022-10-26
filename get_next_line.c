@@ -6,148 +6,114 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:24:49 by huaydin           #+#    #+#             */
-/*   Updated: 2022/10/24 13:42:49 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/10/26 19:15:28 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+char	*ft_free(char *buffer)
 {
-	size_t	length;
-
-	length = 0;
-	while (s[length])
-		length++;
-	return (length);
+	free(buffer);
+	buffer = NULL;
+	return (NULL);
 }
 
-static char	*ft_get_first_line(char **all_lines)
+static char	*ft_get_first_line(char **buffer_read, ssize_t n)
 {
 	char	*first_line;
 	char	*tmp;
 	size_t	i;
 
+	(void)n;
 	i = 0;
 	first_line = NULL;
-	while ((*all_lines)[i] != '\n' && (*all_lines)[i])
+	while ((*buffer_read)[i] != '\n' && (*buffer_read)[i])
 		i++;
-	if ((*all_lines)[i] == '\n')
+	if ((*buffer_read)[i] == '\n')
 	{
-		first_line = ft_substr(*all_lines, 0, i + 1);
-		tmp = ft_strdup(*all_lines + i + 1);
-		free(*all_lines);
-		*all_lines = tmp;
-		if (!**all_lines)
+		first_line = ft_mysubstr(*buffer_read, 0, i + 1);
+		tmp = ft_mystrdup(*buffer_read + i + 1);
+		free(*buffer_read);
+		*buffer_read = tmp;
+		if (!**buffer_read)
 		{
-			free(*all_lines);
-			*all_lines = NULL;
+			free(*buffer_read);
+			*buffer_read = NULL;
 		}
 		return (first_line);
 	}
-	first_line = ft_strdup(*all_lines);
-	free(*all_lines);
-	*all_lines = NULL;
+	first_line = ft_mystrdup(*buffer_read);
+	free(*buffer_read);
+	*buffer_read = NULL;
 	return (first_line);
 }
 
-static char	*ft_join(char *all_lines, char *buffer, ssize_t n)
+static char	*ft_join(char *buffer_read, char *buffer, ssize_t n)
 {
 	char	*tmp;
 
 	buffer[n] = '\0';
-	tmp = ft_strjoin(all_lines, buffer);
-	free(all_lines);
-	all_lines = tmp;
-	return (all_lines);
+	tmp = ft_mystrjoin(buffer_read, buffer);
+	free(buffer_read);
+	buffer_read = tmp;
+	return (buffer_read);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*buffer;
-	static char	*all_lines;
+	static char	*buffer_read = {0};
 	ssize_t		n;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 1024)
 		return (NULL);
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
-	if (!all_lines)
-		all_lines = ft_strdup("");
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer || read(fd, buffer, 0) == -1)
+		return (ft_free(buffer));
+	//if (ft_mystrchr(buffer_read, '\n'))
+	//	return (ft_get_first_line(&buffer_read, 0));
 	n = read(fd, buffer, BUFFER_SIZE);
 	while (n > 0)
 	{
-		buffer[n] = '\0';
-		all_lines = ft_join(all_lines, buffer, n);
-		if (ft_strchr(buffer, '\n'))
+		if (!buffer_read)
+			buffer_read = ft_mystrdup("");
+		buffer_read = ft_join(buffer_read, buffer, n);
+		if (ft_mystrchr(buffer, '\n') || n == 0 || n == -1)
 			break ;
 		n = read(fd, buffer, BUFFER_SIZE);
+		if (n == -1 || n == 0)
+			break ;
 	}
+	//if (*buffer_read)
 	free(buffer);
-	buffer = NULL;
-	if ((n < 0) || (!n && (!all_lines || !*all_lines)))
-		return (NULL);
-	return (ft_get_first_line(&all_lines));
+	//if ((n < 0) || (!n && (!buffer_read || !*buffer_read)))
+	if ((!n && (!buffer_read || !*buffer_read)))
+			return (ft_free(buffer_read));
+	return (ft_get_first_line(&buffer_read, n));
 }
-
-
-
 /*
-int main()
+#include <fcntl.h>
+#include <stdio_ext.h>
+int	main(void)
 {
-  int fd;
-  
-  fd = open("text.txt", O_RDONLY);
-  printf("Line1:%s\n", get_next_line(fd));
-  printf("Line2:%s\n", get_next_line(fd));
-  printf("Line3:%s\n", get_next_line(fd));
-  //printf("%s\n", get_next_line(fd));
-  //close(fd);
-}
-*/
+	int		fd;
+	char	*buffer;
 
-/*
-int	main(int argc, char **argv)
-{
-	char *line;
-	int f;
-	size_t read;
-	size_t len;
-	FILE *fd;	
-	
-	printf("fd=%d\n", BUFFER_SIZE);
-	(void)argc;
-	(void)argv;
-
-	f = open("text.txt", O_RDONLY);
-	//f = (int) fd;
-	printf("fd=%d\n", f);
-	//read = getline(&line, &len, fd);
-	printf("fd=%zu\n", read);
-
-	//printf("fd=%d\n", fd);
-		
-	while ((read = getline(&line, &len, fd)) != -1) {
-		printf("Retrieved line of length %zu :\n", read);
-		printf("%s", line);
-	}
-	
-
-	if (argc == 1)
-		fd = 0;
-	else if (argc == 2)
-	//	fd = open(argv[1], O_RDONLY);
-		fd = open("text.txt", O_RDONLY);
-	else
-		return (2);
-	while (get_next_line(fd, &line) == 1)
-	{
-		ft_putendl(line);
-		free(line);
-	}
-	if (argc == 2)
-		close(fd);
-
+	fd = open("open_close_open.txt", O_RDONLY);
+	//fd = 0;
+	//buffer = malloc(BUFFER_SIZE + 1);
+	//printf("res=%zd", read(fd, buffer, 0) );
+	//return (0);
+	printf("Line1:%s", get_next_line(fd));
+	printf("Line2:%s", get_next_line(fd));
+	printf("Line3:%s", get_next_line(fd));
+	printf("Line4:%s", get_next_line(fd));
+	printf("Line5:%s", get_next_line(fd));
+	printf("Line6:%s", get_next_line(fd));
+	printf("Line7:%s", get_next_line(fd));
+	printf("Line8:%s", get_next_line(fd));
+	//printf("%s\n", get_next_line(fd));
+	//close(fd);
 }
 */

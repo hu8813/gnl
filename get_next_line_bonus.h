@@ -6,7 +6,7 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:35:38 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/24 14:01:11 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/10/26 15:18:39 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,15 @@
 #  define BUFFER_SIZE 1
 # endif
 
-# ifndef FD_SIZE
-#  define FD_SIZE 1024
-# endif
-
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_mystrlen(const char *s);
+char	*ft_mystrchr(const char *s, int c);
+char	*ft_mystrdup(const char *s);
+char	*ft_mystrjoin(char const *s1, char const *s2);
+char	*ft_mysubstr(char const *s, unsigned int start, size_t len);
 
 #endif
