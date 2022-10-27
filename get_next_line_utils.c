@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/21 12:24:55 by huaydin           #+#    #+#             */
-/*   Updated: 2022/10/25 13:50:38 by huaydin          ###   ########.fr       */
+/*   Created: 2022/10/26 23:21:44 by hu8813            #+#    #+#             */
+/*   Updated: 2022/10/26 23:24:16 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_mystrlen(const char *s)
+ssize_t	ft_strlen(const char *s)
 {
-	size_t	length;
+	ssize_t	length;
 
 	length = 0;
 	while (s[length])
@@ -22,9 +22,9 @@ size_t	ft_mystrlen(const char *s)
 	return (length);
 }
 
-char	*ft_mystrchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	size_t	i;
+	ssize_t	i;
 	char	*ptr;
 
 	ptr = (char *)s;
@@ -38,13 +38,13 @@ char	*ft_mystrchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_mystrdup(const char *s)
+char	*ft_strdup(const char *s)
 {
 	char	*str;
-	size_t	i;
+	ssize_t	i;
 
 	i = 0;
-	str = (char *)malloc(sizeof(char) * (ft_mystrlen(s) + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!str)
 		return (NULL);
 	while (s[i])
@@ -56,15 +56,15 @@ char	*ft_mystrdup(const char *s)
 	return (str);
 }
 
-char	*ft_mystrjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*str;
-	size_t	i;
-	size_t	j;
+	ssize_t	i;
+	ssize_t	j;
 
 	i = 0;
 	j = 0;
-	str = (char *)malloc(sizeof(char) * (ft_mystrlen(s1) + ft_mystrlen(s2)
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)
 				+ 1));
 	if (!str)
 		return (NULL);
@@ -82,17 +82,17 @@ char	*ft_mystrjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	*ft_mysubstr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, ssize_t len)
 {
 	char	*str;
 	char	*result;
-	size_t	strsize;
+	ssize_t	strsize;
 
 	if (!s)
 		return (0);
-	if (start > ft_mystrlen(s))
-		start = ft_mystrlen(s);
-	strsize = ft_mystrlen(s + start);
+	if (start > ft_strlen(s))
+		start = ft_strlen(s);
+	strsize = ft_strlen(s + start);
 	if (len > strsize)
 		len = strsize;
 	result = (char *)malloc(sizeof(char) * len + 1);
