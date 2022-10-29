@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:53:40 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/29 22:12:00 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/29 23:23:39 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static char	*remaining_lines(char *str)
 	while (str[i] && str[i] != '\n')
 		i++;
 	if (!str[i] || !str[i + 1])
-		return (free(str), NULL);
+		return (ft_free(&str));
 	if (str[i])
 		i++;
 	result = malloc(sizeof(char) * ft_strlen(str + i) + 1);
 	if (result == NULL)
-		return (free(str), NULL);
+		return (ft_free(&str));
 	j = 0;
 	while (str[i])
 		result[j++] = str[i++];
