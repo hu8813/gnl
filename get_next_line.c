@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:53:40 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/29 22:03:45 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/29 22:12:00 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,28 @@ static char	*ft_free(char **ptr)
 		free(*ptr);
 	*ptr = NULL;
 	return (NULL);
+}
+
+static char	*first_line(char *str)
+{
+	char	*result;
+	size_t	i;
+
+	if (str == NULL)
+		return (NULL);
+	result = malloc(sizeof(char) * ft_strlen(str) + 1);
+	if (result == NULL)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		result[i] = str[i];
+		i++;
+		if (str[i - 1] == '\n')
+			break ;
+	}
+	result[i] = '\0';
+	return (result);
 }
 
 static char	*remaining_lines(char *str)
@@ -46,28 +68,6 @@ static char	*remaining_lines(char *str)
 	return (result);
 }
 
-static char	*extract_line(char *str)
-{
-	char	*result;
-	size_t	i;
-
-	if (str == NULL)
-		return (NULL);
-	result = malloc(sizeof(char) * ft_strlen(str) + 1);
-	if (result == NULL)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		result[i] = str[i];
-		i++;
-		if (str[i - 1] == '\n')
-			break ;
-	}
-	result[i] = '\0';
-	return (result);
-}
-
 char	*get_next_line(int fd)
 {
 	char		*buffer;
@@ -92,7 +92,7 @@ char	*get_next_line(int fd)
 		cache[fd] = ft_strjoin(cache[fd], buffer);
 	}
 	free(buffer);
-	out = extract_line(cache[fd]);
+	out = first_line(cache[fd]);
 	cache[fd] = remaining_lines(cache[fd]);
 	return (out);
 }

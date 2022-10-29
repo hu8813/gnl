@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:53:21 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/29 22:07:08 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/29 22:14:33 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # endif
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 100
 # endif
 
 char		*get_next_line(int fd);

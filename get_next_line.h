@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:52:57 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/29 22:06:57 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/29 22:13:14 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 100
 # endif
 
 char		*get_next_line(int fd);
