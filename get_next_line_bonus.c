@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:53:55 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/30 00:52:29 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/30 01:01:19 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ char	*get_next_line(int fd)
 {
 	char		*buffer;
 	char		*first_line;
-	static char	*cache[1025];
+	static char	*cache[FD_SETSIZE + 1];
 	size_t		n;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || 1024 < fd)
+	if (BUFFER_SIZE <= 0 || fd < 0 || FD_SETSIZE < fd)
 		return (NULL);
 	else if (read(fd, 0, 0) < 0)
 		return (ft_free(&cache[fd]));
