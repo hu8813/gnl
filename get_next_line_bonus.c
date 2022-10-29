@@ -6,7 +6,7 @@
 /*   By: hu8813 <hu8813@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 18:53:55 by hu8813            #+#    #+#             */
-/*   Updated: 2022/10/29 23:23:37 by hu8813           ###   ########.fr       */
+/*   Updated: 2022/10/30 00:52:29 by hu8813           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,25 @@ static char	*ft_free(char **ptr)
 	return (NULL);
 }
 
-static char	*first_line(char *str)
+static char	*get_first_line(char *str)
 {
-	char	*result;
 	size_t	i;
 
 	if (str == NULL)
 		return (NULL);
-	result = malloc(sizeof(char) * ft_strlen(str) + 1);
-	if (result == NULL)
-		return (NULL);
 	i = 0;
-	while (str[i])
-	{
-		result[i] = str[i];
+	while ((str)[i] != '\n' && (str)[i])
 		i++;
-		if (str[i - 1] == '\n')
-			break ;
-	}
-	result[i] = '\0';
-	return (result);
+	if ((str)[i] == '\n')
+		return (ft_substr(str, 0, i + 1));
+	else
+		return (ft_strdup(str));
 }
 
 static char	*remaining_lines(char *str)
 {
 	char	*result;
 	size_t	i;
-	size_t	j;
 
 	if (str == NULL)
 		return (NULL);
@@ -57,13 +49,7 @@ static char	*remaining_lines(char *str)
 		return (ft_free(&str));
 	if (str[i])
 		i++;
-	result = malloc(sizeof(char) * ft_strlen(str + i) + 1);
-	if (result == NULL)
-		return (ft_free(&str));
-	j = 0;
-	while (str[i])
-		result[j++] = str[i++];
-	result[j] = '\0';
+	result = (ft_substr(str, i, ft_strlen(str) - i));
 	free(str);
 	return (result);
 }
@@ -71,7 +57,7 @@ static char	*remaining_lines(char *str)
 char	*get_next_line(int fd)
 {
 	char		*buffer;
-	char		*out;
+	char		*first_line;
 	static char	*cache[1025];
 	size_t		n;
 
@@ -92,7 +78,7 @@ char	*get_next_line(int fd)
 		cache[fd] = ft_strjoin(cache[fd], buffer);
 	}
 	free(buffer);
-	out = first_line(cache[fd]);
+	first_line = get_first_line(cache[fd]);
 	cache[fd] = remaining_lines(cache[fd]);
-	return (out);
+	return (first_line);
 }
