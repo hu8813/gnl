@@ -6,7 +6,7 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 01:12:13 by huaydin           #+#    #+#             */
-/*   Updated: 2022/12/25 09:47:00 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/12/25 09:53:12 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*get_first_and_remaining_lines(char *str, char **remaining)
 char	*get_next_line(int fd)
 {
 	char		*buffer;
-	char		*first_line;
 	static char	*cache[FD_SETSIZE + 1];
 	size_t		n;
 
@@ -63,6 +62,5 @@ char	*get_next_line(int fd)
 		cache[fd] = ft_strjoin(cache[fd], buffer);
 	}
 	free(buffer);
-	first_line = get_first_and_remaining_lines(cache[fd], &cache[fd]);
-	return (first_line);
+	return (get_first_and_remaining_lines(cache[fd], &cache[fd]));
 }
