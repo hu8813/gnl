@@ -6,19 +6,11 @@
 /*   By: huaydin <huaydin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 01:11:50 by huaydin           #+#    #+#             */
-/*   Updated: 2022/12/25 09:52:59 by huaydin          ###   ########.fr       */
+/*   Updated: 2022/12/25 12:47:03 by huaydin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static char	*ft_free(char **ptr)
-{
-	if (*ptr)
-		free(*ptr);
-	*ptr = NULL;
-	return (NULL);
-}
 
 char	*get_first_and_remaining_lines(char *str, char **remaining)
 {
@@ -45,18 +37,21 @@ char	*get_next_line(int fd)
 	static char	*cache[1025];
 	size_t		n;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || 1024 < fd)
+	if (BUFFER_SIZE <= 0 || fd < 0 || 1025 < fd)
 		return (NULL);
 	else if (read(fd, 0, 0) < 0)
-		return (ft_free(&cache[fd]));
+	{
+		if (cache[fd])
+			free(cache[fd]);
+		return (cache[fd] = NULL, NULL);
+	}
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	n = 1;
 	while ((ft_strchr(cache[fd], '\n') == NULL) && n != 0)
 	{
 		n = read(fd, buffer, BUFFER_SIZE);
-		if (n <= 0)
+		if (n <= 0 || n == 0)
 			break ;
 		buffer[n] = '\0';
 		cache[fd] = ft_strjoin(cache[fd], buffer);
