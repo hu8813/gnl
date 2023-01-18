@@ -59,3 +59,31 @@ char	*get_next_line(int fd)
 	free(buffer);
 	return (get_first_and_remaining_lines(cache[fd], &cache[fd]));
 }
+
+/*
+int main(void)
+{
+int fd = open("test.txt", O_RDONLY);
+//int fd = 0;
+char *line;
+
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+line = get_next_line(fd);
+printf("%s", line);
+free(line);
+}
+/*
