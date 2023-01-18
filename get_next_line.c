@@ -63,8 +63,8 @@ char	*get_next_line(int fd)
 /*
 int main(void)
 {
-int fd = open("test.txt", O_RDONLY);
 //int fd = 0;
+int fd = open("test.txt", O_RDONLY);
 char *line;
 
 line = get_next_line(fd);
@@ -86,4 +86,4 @@ line = get_next_line(fd);
 printf("%s", line);
 free(line);
 }
-/*
+*/
