@@ -48,14 +48,14 @@ char	*get_next_line(int fd)
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
+	n = 1;
 	while ((ft_strchr(cache[fd], '\n') == NULL) && n != 0)
 	{
 		n = read(fd, buffer, BUFFER_SIZE);
-		if (n <= 0 || n == 0)
+		if (n <= 0)
 			break ;
 		buffer[n] = '\0';
 		cache[fd] = ft_strjoin(cache[fd], buffer);
 	}
-	free(buffer);
-	return (get_first_and_remaining_lines(cache[fd], &cache[fd]));
+	return (free(buffer), get_first_and_remaining_lines(cache[fd], &cache[fd]));
 }
