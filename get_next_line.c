@@ -59,7 +59,7 @@ char	*get_next_line(int fd)
 	}
 	return (free(buffer), get_first_and_remaining_lines(cache[fd], &cache[fd]));
 }
-
+/*
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -89,3 +89,4 @@ int	main(void)
 	printf("%s", line);
 	free(line);
 }
+*/
