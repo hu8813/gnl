@@ -67,26 +67,17 @@ int	main(void)
 {
 	int		fd;
 	char	*line;
+	int	i;
 
 	//int fd = 0;
 	fd = open("test.txt", O_RDONLY);
+	i = 0;
+	while (i++ < 5)
+	{
 	line = get_next_line(fd);
 	printf("%s", line);
 	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
+	//sleep(10);
+	}
 }
 */
