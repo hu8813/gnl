@@ -39,7 +39,7 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || 1025 < fd)
 		return (NULL);
-	else if (read(fd, 0, 0) < 0)
+	else if (read(fd, 0, 0) < 0) // REMOVE this read, as new moulinette version gives invalid buffer_size read error
 	{
 		if (cache[fd])
 			free(cache[fd]);
